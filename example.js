@@ -1,8 +1,8 @@
 var moo = require("MooBot");
 var bot = moo();
-bot.on("identify", user => {
-  user.spawn("Spin2Team").then(() => {
-    user.ally("MG").then(clan => {
+bot.on("identify", () => {
+  bot.spawn("Spin2Team").then(user => {
+    bot.ally("MG").then(clan => {
       if (clan.owner.id == user.id) {
         console.log("Clan MG not found! Creating new.");
         clan.on("notif", s => {
@@ -20,10 +20,9 @@ bot.on("identify", user => {
   setInterval(() => {
     bot.angle += 0.1; // Spinning!
   }, 40);
-  user.on("killed", () => {
-    user.spawn("Spin2Team");
-    console.log("I'm killed... Respawning");
-  }).on("kill", s => {
-    console.log("Yay! I killed " + s);
-  });
+}).on("killed", () => {
+  bot.spawn("Spin2Team");
+  console.log("I'm killed... Respawning");
+}).on("kill", s => {
+  console.log("Yay! I killed " + s);
 });
