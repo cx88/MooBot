@@ -1,6 +1,6 @@
 var moo = require("MooBot");
 var bot = moo();
-bot.ready(2, () => {
+bot.on("connect", () => {
   bot.spawn("Spin2Team");
   bot.ally("MG").then(clan => {
     if (clan.owner == bot.id) {

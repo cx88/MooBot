@@ -1,6 +1,7 @@
 (() => {
   var io = require("socket.io-client");
   var http = require("http");
+  var EE = require("events");
   var GetIP = cb => {
     var str = "";
     http.request({ host: "moomoo.io", path: "/getIP" }, res => res.on("data", c => str += c).on("end", () => cb(JSON.parse(str))).end());
@@ -10,7 +11,7 @@
   // 2 = connected
   // 3 = ID given
   // 4 = disconnected
-  class Moo {
+  class Moo extends EE {
     constructor(ip, port) {
       this.status = 0;
       if (!ip || !(port > 4999)) {
@@ -23,7 +24,12 @@
         this.connect();
       }
     }
-    ready2(n) { this.status < n && (this.status = n); }
+    ready(n) {
+      while (this.status < n) {
+        var e = ["called", "fetched", "connect", "identified", "disconnected"];
+        super.emit(e[++this.status]);
+      }
+    }
     connect() {
       this.ready2(1);
       this.connection = new Connection(this);
@@ -39,9 +45,12 @@
       var sk = this.socket;
       sk.on("disconnect", () => sk.close());
       sk.once("connect", () => {
-        this.moo.ready2(2);
+        this.moo.ready(2);
       });
     }
+  }
+  class ObjectManager {
+    
   }
   class Thing {}
   class Player {}
@@ -51,4 +60,5 @@
   $.GetIP = GetIP;
   $.Thing = Thing;
   $.Player = Player;
+  $.ObjectManager = ObjectManager;
 })();
