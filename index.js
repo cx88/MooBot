@@ -43,18 +43,6 @@
       sk.once("connect", () => this.emit("connect"));
     }
   }
-  class Connection extends EE {
-    constructor(me) {
-      this.moo = me;
-      this.socket = io.connect(`http://${me.to}:${me.port}`, { reconnection: false, query: "man=1" });
-      this.init();
-      var sk = this.socket;
-      sk.on("disconnect", () => sk.close());
-      sk.once("connect", () => {
-        this.moo.ready(2);
-      });
-    }
-  }
   class ObjectManager {
     
   }
