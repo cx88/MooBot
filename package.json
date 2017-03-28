@@ -2,7 +2,7 @@
   "name": "MooBot",
   "version": "0.0.0",
   "author": "CX",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "description": "Bot API for MooMoo.io",
   "contributors": [
     {
