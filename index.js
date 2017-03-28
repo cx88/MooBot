@@ -12,7 +12,15 @@
   // 3 = ID given
   // 4 = disconnected
   class Moo extends EE {
-    constructor(ip, port) {
+    constructor(opt, port, ip) {
+      if (typeof opt != "object") {
+        ip = opt;
+        this.opt = {};
+      } else {
+        this.opt = opt;
+        ip = opt.ip || (typeof port == "string" ? port : ip);
+        port = opt.ip || port;
+      }
       this.status = 0;
       if (!ip || !(port > 4999)) {
         GetIP(r => {
@@ -24,24 +32,22 @@
         this.connect();
       }
     }
-    ready(n) {
-      while (this.status < n) {
-        var e = ["called", "fetched", "connect", "identified", "disconnected"];
-        super.emit(e[++this.status]);
-      }
-    }
     connect() {
-      this.ready2(1);
-      this.connection = new Connection(this);
+      this.emit("fetched");
+      var sk = this.socket = io.connect(`http://${this.to}:${this.port}`, { reconnection: false, query: "man=1" });
+      sk.on("disconnect", e => {
+        sk.close();
+        super.emit("destroy", e);
+        if (this.opt.autores !== false) { this.connect(); }
+      });
+      sk.once("connect", () => this.emit("connect"));
     }
   }
-  class Connection {
+  class Connection extends EE {
     constructor(me) {
       this.moo = me;
       this.socket = io.connect(`http://${me.to}:${me.port}`, { reconnection: false, query: "man=1" });
       this.init();
-    }
-    init() {
       var sk = this.socket;
       sk.on("disconnect", () => sk.close());
       sk.once("connect", () => {
@@ -52,13 +58,27 @@
   class ObjectManager {
     
   }
+  class Notif {
+    
+  }
+  class Alliance extends EE {
+    
+  }
   class Thing {}
   class Player {}
+  class Self extends Player {
+    spawn(r = "unknown") {
+      if (this.status < 3) { this.moo.on("identify", this.spawn(r)); return; }
+    }
+  }
   var $ = module.exports = exports = () => new Moo();
   $.Moo = Moo;
   $.Connection = Connection;
   $.GetIP = GetIP;
   $.Thing = Thing;
   $.Player = Player;
+  $.Self = Self;
+  $.Notif = Notif;
+  $.Alliance = Alliance;
   $.ObjectManager = ObjectManager;
 })();
