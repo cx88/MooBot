@@ -3,7 +3,7 @@ var bot = moo();
 bot.on("identify", user => {
   user.spawn("Spin2Team").then(() => {
     user.ally("MG").then(clan => {
-      if (clan.owner == user.id) {
+      if (clan.owner.id == user.id) {
         console.log("Clan MG not found! Creating new.");
         clan.on("notif", s => {
           if (s.name.match(/team/gi)) {
