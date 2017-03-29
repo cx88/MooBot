@@ -20,7 +20,8 @@
     "moomoo.io"
   ],
   "dependencies": {
-    "socket.io-client": "^1.7.2"
+    "socket.io-client": "^1.7.2",
+    "lodash": "^4.17.4"
   },
   "engine": "node >= 6.0.x",
   "homepage": "https://github.com/cx88/MooBot",
