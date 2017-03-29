@@ -20,7 +20,7 @@ bot.on("identify", () => {
   setInterval(() => {
     bot.angle += 0.1; // Spinning!
   }, 40);
-}).on("killed", () => {
+}).on("death", () => {
   bot.spawn("Spin2Team");
   console.log("I'm killed... Respawning");
 }).on("kill", s => {
