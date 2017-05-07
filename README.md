@@ -1,3 +1,5 @@
+# This project is in an inactive state due to the multiple layers of bot prevention by Sidney de Vries!
+
 # MooBot
 
 This is an API I made for my MooMoo.io Bot.
